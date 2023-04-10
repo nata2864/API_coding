@@ -101,7 +101,7 @@
           };
         });
         comments = appComments;
-        renderComments();
+        renderApp();
       });
   }
   fetchAndRenderComments();
@@ -120,7 +120,7 @@
           comments[index].isLiked = true;
           comments[index].likes += 1;
         }
-        renderComments();
+        renderApp();
       });
     }
   };
@@ -136,7 +136,7 @@
     }
   };
 
-  const renderComments = () => {
+  const renderApp = () => {
 
     const appEl = document.getElementById ('app');
 
@@ -264,7 +264,7 @@
     clickComment();
 
   };
-  renderComments();
+  renderApp();
 
 </script>
 </html>
