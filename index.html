@@ -7,6 +7,7 @@
 </head>
 
 <body>
+  <div id = "app"></div>
   <div class="container">
     <ul class="comments" id="list">
       <!-- Список рендериться из js-->
@@ -17,6 +18,15 @@
         </textarea>
       <div class="add-form-row">
         <button id="add-button" class="add-form-button">Написать</button>
+      </div>
+    </div>
+
+    <div class="add-form">
+      <input id="login-input" type="text" class="add-form-name" placeholder="Введите логин" />
+      <textarea id="login-input" type="textarea" class="add-form-text" placeholder="Введите пароль" rows="4">
+        </textarea>
+      <div class="add-form-row">
+        <button id="login-button" class="add-form-button">Войти</button>
       </div>
     </div>
   </div>
@@ -32,10 +42,7 @@
   // План
   // 1 Реализовать форму логина в приложении
   // 2 Реализовать форму регистрации
-  const buttonElement = document.getElementById('add-button');
-  const listElement = document.getElementById("list");
-  const nameInputElement = document.getElementById("name-input");
-  const commentsInputElement = document.getElementById("comments-input");
+ 
 
   let myDate = new Date();
   let year = myDate.getFullYear().toString().slice(-2);
@@ -130,7 +137,10 @@
   };
 
   const renderComments = () => {
-    const commentsHTML = comments.map((comment, index) => {
+
+    const appEl = document.getElementById ('app');
+
+    const commentsHtml = comments.map((comment, index) => {
       return `<li data-index = '${index}' id = "list-comment" class="comment">
           <div class="comment-header">
             <div>  ${comment.name.replaceAll("&", "&amp;")
@@ -158,15 +168,41 @@
           </div>
         </li>`;
     }).join('');
+  
+  const appHtml =  
+    `<div class="container">
 
-    listElement.innerHTML = commentsHTML;
+      <ul class="comments" id="list">
+        <!-- Список рендериться из js-->
+      ${commentsHtml}
+      </ul>
+      <div class="add-form">
+        <input id="name-input" type="text" class="add-form-name" placeholder="Введите ваше имя" />
+        <textarea id="comments-input" type="textarea" class="add-form-text" placeholder="Введите ваш коментарий" rows="4">
+          </textarea>
+        <div class="add-form-row">
+          <button id="add-button" class="add-form-button">Написать</button>
+        </div>
+    </div>
 
-    clickLikeButton();
-    clickComment();
-  };
-  renderComments();
+    <div class="add-form">
+        <input id="login-input" type="text" class="add-form-name" placeholder="Введите логин" />
+        <textarea id="login-input" type="textarea" class="add-form-text" placeholder="Введите пароль" rows="4">
+          </textarea>
+        <div class="add-form-row">
+          <button id="login-button" class="add-form-button">Войти</button>
+        </div>
+        </div>
+    </div>`
 
-  buttonElement.addEventListener("click", () => {
+    appEl.innerHTML = appHtml;
+
+    const buttonElement = document.getElementById('add-button');
+    const listElement = document.getElementById("list");
+    const nameInputElement = document.getElementById("name-input");
+    const commentsInputElement = document.getElementById("comments-input");
+
+    buttonElement.addEventListener("click", () => {
     nameInputElement.classList.remove('error');
     commentsInputElement.classList.remove('error');
 
@@ -175,9 +211,6 @@
       commentsInputElement.classList.add('error');
       return;
     };
-
-    const startAt = Date.now();
-    console.log("Начинаем делать запрос");
 
     buttonElement.disabled = true;
     buttonElement.textContent = "Элемент добавлятся...";
@@ -207,7 +240,6 @@
         return response.json();
       })
       .then((response) => {
-        console.log("Время: " + (Date.now() - startAt));
         return response;
       })
       .then(() => {
@@ -225,7 +257,14 @@
         buttonElement.textContent = "Написать";
         console.warn(error);
       });
-    renderComments();
+  
   });
+
+    clickLikeButton();
+    clickComment();
+
+  };
+  renderComments();
+
 </script>
 </html>
