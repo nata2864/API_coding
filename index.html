@@ -7,10 +7,7 @@
 </head>
 
 <body>
-  <div id = "app">
-    
-  </div>
-  
+  <div id = "app"></div>
 </body>
 <style>
   .error {
@@ -20,16 +17,10 @@
 
 <script>
 
-  // План
-  // 1 Реализовать форму логина в приложении
-  // 2 Реализовать форму регистрации
- 
-
   let myDate = new Date();
   let year = myDate.getFullYear().toString().slice(-2);
   let month = (myDate.getMonth() + 1);
   let day = myDate.getDate();
-
   let hour = myDate.getHours(); // получаем час из нашей даты
   let minute = myDate.getMinutes(); // получаем минуты
   let second = myDate.getSeconds(); // получаем секунды
@@ -51,10 +42,13 @@
   let comments = [];
 
   let token = "Bearer asb4c4boc86gasb4c4boc86g37w3cc3bo3b83k4g37k3bk3cg3c03ck4k";
+ 
+  token = null;
 
   const host = " https://webdev-hw-api.vercel.app/api/v2/natalia-bashirova/comments"
 
   const fetchAndRenderComments = () => {
+
     return fetch(host, {
         method: "GET",
         headers: {
@@ -67,7 +61,6 @@
           // token = prompt ("Введите верный пароль");
           // fetchAndRenderComments ();
           throw new Error ("Нет авторизации");
-
         }
         return response.json();
       })
@@ -85,41 +78,34 @@
         renderApp();
       });
   }
-  fetchAndRenderComments();
-
-  const clickLikeButton = () => {
-    const likeButtonsElements = document.querySelectorAll('.like-button');
-
-    for (const likeButtonElement of likeButtonsElements) {
-      likeButtonElement.addEventListener('click', () => {
-        event.stopPropagation();
-        const index = likeButtonElement.dataset.index;
-        if (comments[index].isLiked) {
-          comments[index].isLiked = false;
-          comments[index].likes -= 1;
-        } else {
-          comments[index].isLiked = true;
-          comments[index].likes += 1;
-        }
-        renderApp();
-      });
-    }
-  };
-
-  const clickComment = () => {
-    const comment = document.querySelectorAll('.comment');
-    for (const commentElement of comment) {
-      commentElement.addEventListener('click', () => {
-        const index = commentElement.dataset.index;
-        commentsInputElement.value = `${comments[index].name}
-        ${comments[index].text}`;
-      });
-    }
-  };
-
+ 
   const renderApp = () => {
 
     const appEl = document.getElementById ('app');
+    if (!token) {
+      const appHtml =  
+    `<div class="container">
+      <ul class="comments" id="list">
+      </ul>
+    
+    <div class="add-form">
+        <input id="login-input" type="text" class="add-form-name" placeholder="Введите логин" />
+        <textarea id="login-input" type="textarea" class="add-form-text" placeholder="Введите пароль" rows="4">
+          </textarea>
+        <div class="add-form-row">
+          <button id="login-button" class="add-form-button">Войти</button>
+        </div>
+        </div>
+     </div>`;
+
+    appEl.innerHTML = appHtml;
+
+    document.getElementById ("login-button").addEventListener ('click', () => {
+      token = "Bearer asb4c4boc86gasb4c4boc86g37w3cc3bo3b83k4g37k3bk3cg3c03ck4k";
+      fetchAndRenderComments();
+    }) 
+    return;
+    }
 
     const commentsHtml = comments.map((comment, index) => {
       return `<li data-index = '${index}' id = "list-comment" class="comment">
@@ -164,19 +150,41 @@
         <div class="add-form-row">
           <button id="add-button" class="add-form-button">Написать</button>
         </div>
-    </div>
-
-    <div class="add-form">
-        <input id="login-input" type="text" class="add-form-name" placeholder="Введите логин" />
-        <textarea id="login-input" type="textarea" class="add-form-text" placeholder="Введите пароль" rows="4">
-          </textarea>
-        <div class="add-form-row">
-          <button id="login-button" class="add-form-button">Войти</button>
-        </div>
-        </div>
     </div>`
 
-    appEl.innerHTML = appHtml;
+
+  appEl.innerHTML = appHtml;
+
+  const clickLikeButton = () => {
+    const likeButtonsElements = document.querySelectorAll('.like-button');
+
+    for (const likeButtonElement of likeButtonsElements) {
+      likeButtonElement.addEventListener('click', () => {
+        event.stopPropagation();
+        const index = likeButtonElement.dataset.index;
+        if (comments[index].isLiked) {
+          comments[index].isLiked = false;
+          comments[index].likes -= 1;
+        } else {
+          comments[index].isLiked = true;
+          comments[index].likes += 1;
+        }
+        renderApp();
+      });
+    }
+  };
+
+  const clickComment = () => {
+    const comment = document.querySelectorAll('.comment');
+    for (const commentElement of comment) {
+      commentElement.addEventListener('click', () => {
+        const index = commentElement.dataset.index;
+        commentsInputElement.value = `${comments[index].name}
+        ${comments[index].text}`;
+      });
+    }
+  };
+
 
     const buttonElement = document.getElementById('add-button');
     const listElement = document.getElementById("list");
