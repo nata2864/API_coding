@@ -1,16 +1,17 @@
+import { addComments, getComments } from "./api.js";
 
 let myDate = new Date();
 let year = myDate.getFullYear().toString().slice(-2);
 let month = (myDate.getMonth() + 1);
 let day = myDate.getDate();
-let hour = myDate.getHours(); // получаем час из нашей даты
-let minute = myDate.getMinutes(); // получаем минуты
-let second = myDate.getSeconds(); // получаем секунды
+let hour = myDate.getHours();
+let minute = myDate.getMinutes(); 
+let second = myDate.getSeconds(); 
 
-if (minute < 10) { // если минут будет меньше 10,
-  minute = "0" + minute; // то перед ними поставим 0
+if (minute < 10) { 
+  minute = "0" + minute; 
 }
-if (hour < 10) { // если секунд будет меньше 10,
+if (hour < 10) { 
   hour = "0" + hour;
 }
 if (day < 10) {
@@ -31,22 +32,7 @@ const host = " https://webdev-hw-api.vercel.app/api/v2/natalia-bashirova/comment
 
 const fetchAndRenderComments = () => {
 
-  return fetch(host, {
-      method: "GET",
-      headers: {
-        Authorization: token,
-      },
-    })
-    .then((response) => {
-
-      if (response.status === 401) {
-        // token = prompt ("Введите верный пароль");
-        // fetchAndRenderComments ();
-        throw new Error ("Нет авторизации");
-      }
-      return response.json();
-    })
-    .then((responseData) => {
+    return getComments ({token}).then((responseData) => {
       const appComments = responseData.comments.map((comment) => {
         return {
           name: comment.author.name,
@@ -187,15 +173,10 @@ const clickComment = () => {
   buttonElement.textContent = "Элемент добавлятся...";
 
 
-  fetch(host, {
-    method: "POST",
-    body: JSON.stringify({
-      name: nameInputElement.value,
-      text: commentsInputElement.value,
-    }),
-    headers:{
-    Authorization: token,
-    },
+  addComments ({
+    name: nameInputElement.value,
+    text: commentsInputElement.value,
+    token
   })
     .then((response) => {
 
