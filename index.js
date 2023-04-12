@@ -66,6 +66,7 @@ const renderApp = () => {
                 .replaceAll(">", "&gt;")
                 .replaceAll('"', "&quot;")
             } </div>
+          
           <div> ${comment.date}</div>
         </div>
         <div class="comment-body">
@@ -75,6 +76,7 @@ const renderApp = () => {
                 .replaceAll(">", "&gt;")
                 .replaceAll('"', "&quot;")
             }
+            (Создал: ${comment.user?.name ?? "Неизвестно"})
           </div>
         </div>
         <div class="comment-footer">
@@ -86,6 +88,8 @@ const renderApp = () => {
         </div>
       </li>`;
     }).join('');
+
+ 
 
     const appHtml =
         `<div class="container">
