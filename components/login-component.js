@@ -1,4 +1,4 @@
-import {login} from "../api.js"
+import {loginUser} from "../api.js"
 
 export function renderLoginComponent({appEl, setToken,fetchAndRenderComments}) {
     const appHtml =  
@@ -6,9 +6,11 @@ export function renderLoginComponent({appEl, setToken,fetchAndRenderComments}) {
     <ul class="comments" id="list">
     </ul>
     <div class="add-form">
-        <input id="login-input" type="text" class="add-form-name" placeholder="Введите логин" />
-        <textarea id="login-input" type="textarea" class="add-form-text" placeholder="Введите пароль" rows="4">
-            </textarea>
+       
+    <input type="text" id="login-input" class="add-form-name" placeholder="Введите логин" />
+    <input type="password" id="password-input"
+        < input id="password-input" type="password" class="add-form-text" placeholder="Введите пароль"/>
+         
         <div class="add-form-row">
             <button id="login-button" class="add-form-button">Войти</button>
         </div>
@@ -17,18 +19,34 @@ export function renderLoginComponent({appEl, setToken,fetchAndRenderComments}) {
 
     appEl.innerHTML = appHtml;
 
-    document.getElementById ("login-button").addEventListener ('click', () => {
+    document.getElementById("login-button").addEventListener("click", () => {
+    const login = document.getElementById ("login-input").value;
+    const password = document.getElementById ("password-input").value;
 
-    login({
-      login: "admin",
-      password: "admin"
-    }).then((user)=>{
-      console.log(user)
-      setToken(`Bearer ${user.user.token}`);
+    if (!login) {
+      alert ('Введите логин');
+      return;
+    }
 
-      fetchAndRenderComments();
-    });
     
+    if (!password) {
+      alert ('Введите пароль')
+      return;
+    }
+
+
+    
+    loginUser({
+      login: login,
+      password: password,
+    })
+    .then((user) => {
+      setToken(`Bearer ${user.user.token}`);
+      fetchAndRenderComments();
+    }).catch((error) => {
+      // TODO: Выводить алерт красиво
+      alert(error.message);
+    });
   }) 
 }
 

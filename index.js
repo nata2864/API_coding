@@ -100,7 +100,7 @@ const renderApp = () => {
     </ul>
     <div class="add-form">
       <input id="name-input" type="text" class="add-form-name" placeholder="Введите ваше имя" />
-      <textarea id="comments-input" type="textarea" class="add-form-text" placeholder="Введите ваш коментарий" rows="4">
+      <textarea id="comments-input" type="textarea" class="add-form-text" placeholder="Введите ваш коментарий" rows="4"/>
         </textarea>
       <div class="add-form-row">
         <button id="add-button" class="add-form-button">Написать</button>
@@ -110,7 +110,7 @@ const renderApp = () => {
 
     appEl.innerHTML = appHtml;
 
-    const clickLikeButton = () => {
+    const clickLikeButton = (event) => {
         const likeButtonsElements = document.querySelectorAll('.like-button');
 
         for (const likeButtonElement of likeButtonsElements) {
