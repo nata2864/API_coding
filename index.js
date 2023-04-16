@@ -1,27 +1,8 @@
 import { addComments, getComments } from "./api.js";
-import { renderLoginComponent } from "./components/login-component.js"
+import { renderLoginComponent } from "./components/login-component.js";
+import {getFormattedDate} from "./data.js";
 
-let myDate = new Date();
-let year = myDate.getFullYear().toString().slice(-2);
-let month = (myDate.getMonth() + 1);
-let day = myDate.getDate();
-let hour = myDate.getHours();
-let minute = myDate.getMinutes();
-let second = myDate.getSeconds();
-
-if (minute < 10) {
-    minute = "0" + minute;
-}
-if (hour < 10) {
-    hour = "0" + hour;
-}
-if (day < 10) {
-    day = "0" + day;
-}
-if (month < 10) {
-    month = "0" + month;
-}
-let fullDate = day + "." + month + "." + year + " " + hour + ":" + minute;
+  let myFormattedDate = getFormattedDate();
 
 let comments = [];
 
@@ -34,7 +15,7 @@ const fetchAndRenderComments = () => {
         const appComments = responseData.comments.map((comment) => {
             return {
                 name: comment.author.name,
-                date: fullDate,
+                date: myFormattedDate,
                 text: comment.text,
                 likes: comment.likes,
                 isLiked: false,
@@ -100,7 +81,7 @@ const renderApp = () => {
     </ul>
     <div class="add-form">
       <input id="name-input" type="text" class="add-form-name" placeholder="Введите ваше имя" />
-      <textarea id="comments-input" type="textarea" class="add-form-text" placeholder="Введите ваш коментарий" rows="4">
+      <textarea id="comments-input" type="textarea" class="add-form-text" placeholder="Введите ваш коментарий" rows="4"/>
         </textarea>
       <div class="add-form-row">
         <button id="add-button" class="add-form-button">Написать</button>
@@ -110,7 +91,7 @@ const renderApp = () => {
 
     appEl.innerHTML = appHtml;
 
-    const clickLikeButton = () => {
+    const clickLikeButton = (event) => {
         const likeButtonsElements = document.querySelectorAll('.like-button');
 
         for (const likeButtonElement of likeButtonsElements) {
