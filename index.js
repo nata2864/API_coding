@@ -1,8 +1,7 @@
 import { addComments, getComments } from "./api.js";
 import { renderLoginComponent } from "./components/login-component.js";
-import {getFormattedDate} from "./data.js";
-
-  let myFormattedDate = getFormattedDate();
+import { formatDateToRu, formatDateToUs } from "./lib/formatDate/formatDate.js"
+import { format } from "date-fns";
 
 let comments = [];
 
@@ -15,7 +14,7 @@ const fetchAndRenderComments = () => {
         const appComments = responseData.comments.map((comment) => {
             return {
                 name: comment.author.name,
-                date: myFormattedDate,
+                date: comment.date,
                 text: comment.text,
                 likes: comment.likes,
                 isLiked: false,
@@ -38,8 +37,9 @@ const renderApp = () => {
         });
         return;
     }
-
+  
     const commentsHtml = comments.map((comment, index) => {
+        const createDate = format(new Date, 'yyyy-MM-dd hh.mm.ss');
         return `<li data-index = '${index}' id = "list-comment" class="comment">
         <div class="comment-header">
           <div>  ${comment.name.replaceAll("&", "&amp;")
@@ -47,8 +47,7 @@ const renderApp = () => {
                 .replaceAll(">", "&gt;")
                 .replaceAll('"', "&quot;")
             } </div>
-          
-          <div> ${comment.date}</div>
+          <div>  ${createDate}</div>
         </div>
         <div class="comment-body">
           <div class="comment-text">
@@ -70,7 +69,6 @@ const renderApp = () => {
       </li>`;
     }).join('');
 
- 
 
     const appHtml =
         `<div class="container">
